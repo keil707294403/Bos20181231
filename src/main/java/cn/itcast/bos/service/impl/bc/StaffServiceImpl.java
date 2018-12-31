@@ -1,0 +1,37 @@
+package cn.itcast.bos.service.impl.bc;
+
+import java.util.List;
+
+import cn.itcast.bos.domain.bc.Staff;
+import cn.itcast.bos.page.PageRequestBean;
+import cn.itcast.bos.page.PageResponseBean;
+import cn.itcast.bos.service.base.BaseService;
+import cn.itcast.bos.service.bc.StaffService;
+
+public class StaffServiceImpl extends BaseService implements StaffService {
+
+	public void saveOrUpdate(Staff staff) {
+		staffDAO.saveOrUpdate(staff);
+	}
+
+
+	public PageResponseBean pageQuery(PageRequestBean pageRequestBean) {
+		return pageQuery(pageRequestBean, staffDAO);
+	}
+
+
+	public void delBatch(String[] ids) {
+		// 修改每个id 对应 取派员 deltag 为 1
+		for (String id : ids) {
+			Staff staff = staffDAO.findById(id);
+			staff.setDeltag("1");
+		}
+	}
+
+
+	public List<Staff> findAllNoDeleteStaffs() {
+		// 查询条件 deltag = 0
+		return staffDAO.findByNamedQuery("Staff.findNoDelete");
+	}
+
+}
